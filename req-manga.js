@@ -13,7 +13,7 @@ const titles = {};
 for (let skip = 0; true; skip += LIMIT) {
   const files = await imagekit.listFiles({ limit: LIMIT, skip, sort: 'ASC_NAME' });
   console.log(files);
-  for (const f of files.sort((a, b) => a.name.localeCompare(b.name, [], { numeric: true }))) {
+  for (const f of files.sort((a, b) => a.filePath.localeCompare(b.filePath, [], { numeric: true }))) {
     const [, , title, chapter] = f.filePath.split('/');
     if (!titles[title])
       titles[title] = {};
