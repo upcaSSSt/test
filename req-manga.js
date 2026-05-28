@@ -11,7 +11,7 @@ const imagekit = new ImageKit({
 const titles = {};
 
 for (let skip = 0; true; skip += LIMIT) {
-  const files = await imagekit.listFiles({ path: '/manga', limit: LIMIT, skip, sort: 'ASC_NAME' });
+  const files = await imagekit.listFiles({ limit: LIMIT, skip, sort: 'ASC_NAME' });
   console.log(files);
   for (const f of files.sort((a, b) => a.name.localeCompare(b.name, [], { numeric: true }))) {
     const [, , title, chapter] = f.filePath.split('/');
