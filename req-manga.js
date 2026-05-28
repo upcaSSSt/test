@@ -9,12 +9,5 @@ const imagekit = new ImageKit({
 
 const files = await imagekit.listFiles({ searchQuery: 'filePath LIKE "/manga/%"', limit: 1000 });
 console.log('FILES', files);
-/*const cleanFiles = files
-  .filter(file => file.fileType === 'image' && file.name.endsWith('.webp'))
-  .map(file => ({
-    name: file.name,
-    filePath: file.filePath,
-    url: file.url
-  }));*/
 
 writeFileSync('manga.json', JSON.stringify(files, null, 2));
