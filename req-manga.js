@@ -8,7 +8,7 @@ const imagekit = new ImageKit({
 });
 
 const files = await imagekit.listFiles({ path: '/manga', limit: 1000 });
-console.log(files);
+console.log('FILES', files);
 /*const cleanFiles = files
   .filter(file => file.fileType === 'image' && file.name.endsWith('.webp'))
   .map(file => ({
