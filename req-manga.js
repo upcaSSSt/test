@@ -1,13 +1,30 @@
 import ImageKit from 'imagekit';
 import { writeFileSync } from 'node:fs';
 
+const LIMIT = 1000;
+
 const imagekit = new ImageKit({
   publicKey: process.env.PUBLIC_KEY,
   privateKey: process.env.PRIVATE_KEY,
   urlEndpoint: process.env.URL_ENDPOINT,
 });
+const titles = {};
 
-const files = await imagekit.listFiles({ includeFolderItems: true, limit: 1000 });
-console.log('FILES', files);
+for (let skip = 0; true; skip += LIMIT) {
+  const files = await imagekit.listFiles({ path: '/manga', limit: LIMIT, skip, sort: 'ASC_NAME' });
+  console.log(files);
+  for (const f of files.sort((a, b) => a.name.localeCompare(b.name, [], { numeric: true }))) {
+    const [, , title, chapter] = f.filePath.split('/');
+    if (!titles[title])
+      titles[title] = {};
+    if (!titles[title][chapter])
+      titles[title][chapter] = [];
 
-writeFileSync('manga.json', JSON.stringify(files, null, 2));
+    titles[title][chapter].push({ name: f.name, url: f.url });
+  }
+
+  if (files.length !== LIMIT)
+    break;
+}
+
+writeFileSync('manga.json', JSON.stringify(titles, null, 2));
