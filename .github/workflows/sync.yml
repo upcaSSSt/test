@@ -24,9 +24,9 @@ jobs:
 
       - name: Generate JSON
         env:
-          IK_PUBLIC_KEY: ${{ vars.PUBLIC_KEY }}
-          IK_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          IK_URL_ENDPOINT: ${{ vars.URL_ENDPOINT }}
+          PUBLIC_KEY: ${{ vars.PUBLIC_KEY }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          URL_ENDPOINT: ${{ vars.URL_ENDPOINT }}
         run: node req-manga.js
 
       - name: Commit and Push changes
