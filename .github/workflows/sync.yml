@@ -35,6 +35,6 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add manga.json
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m 'Automatically update the manga list [skip ci]'
+            git commit -m 'Automatically update manga.json [skip ci]'
             git push
           fi
