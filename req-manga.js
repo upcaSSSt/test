@@ -7,7 +7,7 @@ const imagekit = new ImageKit({
   urlEndpoint: process.env.URL_ENDPOINT,
 });
 
-const files = await imagekit.listFiles({ searchQuery: 'filePath LIKE "/manga/%"', limit: 1000 });
+const files = await imagekit.listFiles({ path: '/manga', includeFolderItems: true, limit: 1000 });
 console.log('FILES', files);
 
 writeFileSync('manga.json', JSON.stringify(files, null, 2));
