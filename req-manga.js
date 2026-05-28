@@ -7,7 +7,7 @@ const imagekit = new ImageKit({
   urlEndpoint: process.env.URL_ENDPOINT,
 });
 
-const files = await imagekit.listFiles({ path: '/manga', limit: 1000 });
+const files = await imagekit.listFiles({ searchQuery: 'filePath LIKE "/manga/%"', limit: 1000 });
 console.log('FILES', files);
 /*const cleanFiles = files
   .filter(file => file.fileType === 'image' && file.name.endsWith('.webp'))
