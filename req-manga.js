@@ -8,23 +8,29 @@ const imagekit = new ImageKit({
   privateKey: process.env.PRIVATE_KEY,
   urlEndpoint: process.env.URL_ENDPOINT,
 });
+const pages = [];
 const titles = {};
 
-for (let skip = 0; true; skip += LIMIT) {
-  const files = await imagekit.listFiles({ limit: LIMIT, skip, sort: 'ASC_NAME' });
-  console.log(files.sort((a, b) => a.name.localeCompare(b.name, [], { numeric: true })));
-  for (const f of files.sort((a, b) => a.name.localeCompare(b.name, [], { numeric: true }))) {
-    const [, , title, chapter] = f.filePath.split('/');
-    if (!titles[title])
-      titles[title] = {};
-    if (!titles[title][chapter])
-      titles[title][chapter] = [];
+for (let skip = 0; files.length % LIMIT === 0; skip += LIMIT)
+  pages.push(...(await imagekit.listFiles({ limit: LIMIT, skip, sort: 'ASC_NAME' })));
+pages.sort(compare);
 
-    titles[title][chapter].push({ name: f.name, url: f.url });
-  }
-
-  if (files.length !== LIMIT)
-    break;
+const titles = {};
+for (const p of pages) {
+  const [, , title, chapter] = f.filePath.split('/');
+  titles[title] ||= {};
+  titles[title][chapter] ||= [];
+  titles[title][chapter].push({ name: p.name, url: p.url });
 }
 
-writeFileSync('manga.json', JSON.stringify(titles, null, 2));
+writeFileSync('manga.json', JSON.stringify(titles));
+
+function compare(a, b) {
+  const aReg = a.filePath.matchAll(/d+/g);
+  for (const bDigit of b.filePath.matchAll(/d+/g)) {
+    const aDigit = aReg.next().value;
+    if (aDigit !== bDigit)
+      return aDigit - bDigit;
+  }
+  return 0;
+}
